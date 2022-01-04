@@ -27,15 +27,15 @@ func SetIndicators(nameHigh, nameLow, nameClose string) error {
 	master := dataframe.ReadCSV(file)
 
 	if INDICATOR_SWITCH["MACD"] {
-		GetMACD(master, nameClose)
+		GetMACD(&master, nameClose)
 	}
 
 	if INDICATOR_SWITCH["BOLLINGER"] {
-		GetBollingerBands(master, nameClose)
+		GetBollingerBands(&master, nameClose)
 	}
 
 	if INDICATOR_SWITCH["RSI"] {
-		GetRSI(master, nameClose)
+		GetRSI(&master, nameClose)
 	}
 
 	master.WriteCSV(newFile)
@@ -57,30 +57,30 @@ func checkIndicators() error {
 	return errors.New("no_selected_indicator")
 }
 
-func GetMACD(master dataframe.DataFrame, nameClose string) {
+func GetMACD(master *dataframe.DataFrame, nameClose string) {
 	macd, signal := indicator.Macd(master.Col(nameClose).Float())
 
 	series1 := series.New(macd, series.Float, "MacdMacd")
 	series2 := series.New(signal, series.Float, "MacdSignal")
 
-	master.CBind(dataframe.New(series1, series2))
+	*master = master.CBind(dataframe.New(series1, series2))
 }
 
-func GetBollingerBands(master dataframe.DataFrame, nameClose string) {
+func GetBollingerBands(master *dataframe.DataFrame, nameClose string) {
 	middle, upper, lower := indicator.BollingerBands(master.Col(nameClose).Float())
 
 	series1 := series.New(middle, series.Float, "BollingerMiddle")
 	series2 := series.New(upper, series.Float, "BollingerUpper")
 	series3 := series.New(lower, series.Float, "BollingerLower")
 
-	master.CBind(dataframe.New(series1, series2, series3))
+	*master = master.CBind(dataframe.New(series1, series2, series3))
 }
 
-func GetRSI(master dataframe.DataFrame, nameClose string) {
+func GetRSI(master *dataframe.DataFrame, nameClose string) {
 	rs, rsi := indicator.Rsi(master.Col(nameClose).Float())
 
 	series1 := series.New(rs, series.Float, "RsiRs")
 	series2 := series.New(rsi, series.Float, "RsiRsi")
 
-	master.CBind(dataframe.New(series1, series2))
+	*master = master.CBind(dataframe.New(series1, series2))
 }

@@ -18,6 +18,14 @@ func GetNewCSV(name string) (*os.File, *csv.Writer, error) {
 	}
 }
 
+func GetGenesisTime() string {
+	return CRYPTO_GENESIS + "T09:00:00+09:00"
+}
+
+func GetFileName() string {
+	return strings.ToLower(CRYPTO_NAME) + "_" + TIME_INTERVAL
+}
+
 func GetConfirm() (bool, error) {
 	var response string
 	fmt.Println("Continue?: (Y/N)")
@@ -62,6 +70,7 @@ func PrintExpectation(genesis string, duration string, interval string) (float64
 
 	fmt.Println("Expected Request:", expectedRequest)
 	fmt.Println("Expected Contain:", expectedContain)
+	fmt.Println("Expected Data Rows:", expectedContain*int64(expectedRequest))
 	fmt.Println("Expected Downloading Time:", math.Floor(expectedRequest*0.105), "Seconds")
 
 	return expectedRequest, nil

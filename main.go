@@ -15,16 +15,11 @@ var (
 	API    = "lWTzykapQbvi7kSU6OYHuEYVvbc9f9Bi5fidxJmvYpwFvnDlLPP42fMcgtaPLDtR"
 	SECRET = "IbAZ82BeiFAWtBzTQtefn9FDaVnd3mkOdQXJMkBf5tMeWIMfcDA9Mn6qWvQfbPpM"
 	/*
-		NOTE: omit ".csv" in CSV_FILE_NAME
-		You need find out cryptocurrency name from binance else occur error.
-	*/
-	CSV_FILE_NAME = "btcusdt_1m"
-	CRYPTO_NAME   = "BTCUSDT"
-	/*
 		Genesis time is targetted cryptocurrency listed date.
-		Format of this time must be RFC3339 in KST(Korea Standard Time)
+		Format of this time must be YYYY-MM-DD
 	*/
-	CRYPTO_GENESIS = "2019-09-08T09:00:00+09:00"
+	CRYPTO_NAME    = "BTCUSDT"
+	CRYPTO_GENESIS = "2019-09-08"
 	/*
 		Go-Lang time.ParseDuration Scales
 		NanoSecond : ns
@@ -33,8 +28,11 @@ var (
 		Second     : s
 		Minute     : m
 		Hour       : h
+
+		if interval is minutes scale,
+		duration = (interval * 500) / 60
 	*/
-	TIME_DURATION = "8.33333h"
+	TIME_DURATION = "41.66666h"
 	/*
 		Binance Futures Intervals (23 Dec 2021)
 		Minutes : 1m, 3m, 5m, 15m, 30m
@@ -43,7 +41,7 @@ var (
 		Weeks   : 1w
 		Months  : 1M
 	*/
-	TIME_INTERVAL = "1m"
+	TIME_INTERVAL = "5m"
 	/*
 		Switch of Indicators
 	*/
@@ -55,7 +53,7 @@ var (
 )
 
 func main() {
-	if err := GetNewKlines(CSV_FILE_NAME, CRYPTO_NAME, CRYPTO_GENESIS, TIME_DURATION, TIME_INTERVAL); err != nil {
+	if err := GetNewKlines(GetFileName(), CRYPTO_NAME, GetGenesisTime(), TIME_DURATION, TIME_INTERVAL); err != nil {
 		log.Fatal(err)
 	}
 

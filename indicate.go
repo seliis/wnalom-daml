@@ -14,12 +14,14 @@ func SetIndicators(nameHigh, nameLow, nameClose string) error {
 		return err
 	}
 
-	newFile, err := os.Create(CSV_FILE_NAME + "_indicated.csv")
+	fileName := GetFileName()
+
+	newFile, err := os.Create(fileName + "_indicated.csv")
 	if err != nil {
 		return err
 	}
 
-	file, err := os.Open(CSV_FILE_NAME + ".csv")
+	file, err := os.Open(fileName + ".csv")
 	if err != nil {
 		return err
 	}
